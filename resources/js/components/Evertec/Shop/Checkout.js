@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import Loading from "react-fullscreen-loading";
+import { HttPost } from "../services/HttpPost";
 
 const Toast = Swal.mixin({
     toast: true,
@@ -20,10 +22,11 @@ export const Checkout = () => {
             : []
     );
     const [client, setClient] = useState({
-        name: "",
-        email: "",
-        phone: "",
+        name: "edwin caicedo",
+        email: "edwin123067@gmail.com",
+        phone: "3023697923",
     });
+    const [loading, setLoading] = useState(false);
     const [total, setTotal] = useState(0);
     useEffect(() => {
         let totalCart = 0;
@@ -43,8 +46,9 @@ export const Checkout = () => {
         window.localStorage.setItem("car", JSON.stringify(newcart));
     };
 
-    const createSale = (e) => {
+    const createSale = async (e) => {
         e.preventDefault();
+        setLoading(true);
         if (client.name == "" || client.email == "" || client.phone == "") {
             Toast.fire({
                 icon: "error",
@@ -59,8 +63,39 @@ export const Checkout = () => {
             });
             return;
         }
-        alert("text");
+        let ref = uuidv4();
+        const resp = await HttPost(
+            {
+                ...client,
+                total: total,
+                cart: cart,
+                referencia: ref,
+            },
+            "/api/payment"
+        );
+        const { processUrl, message } = resp;
+        setLoading(false);
+        if (processUrl) location.href = processUrl;
+        if (!processUrl)
+            Toast.fire({
+                icon: "error",
+                title: message,
+            });
     };
+
+    const uuidv4 = () => {
+        return ([1e7] + 1e3 + 4e3 + 8e3 + 1e11).replace(/[018]/g, (c) =>
+            (
+                c ^
+                (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
+            ).toString(16)
+        );
+    };
+
+    if (loading)
+        return (
+            <Loading loading={true} background="black" loaderColor="white" />
+        );
 
     return (
         <div>

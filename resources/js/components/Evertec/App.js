@@ -7,6 +7,8 @@ import { Shop } from "./Shop/Shop";
 import styled from "styled-components";
 import GlobalStyle from "./styles/GlobalStyle";
 import { Checkout } from "./Shop/Checkout";
+import { Detail } from "./Shop/Detail";
+import { Orders } from "./Shop/Orders";
 
 export const App = () => {
     return (
@@ -28,12 +30,17 @@ export const App = () => {
                                 <Route
                                     exact
                                     path={"/tienda/ordenes"}
-                                    component={About}
+                                    component={Orders}
                                 />
                                 <Route
                                     exact
                                     path={"/tienda/checkout"}
                                     component={Checkout}
+                                />
+                                <Route
+                                    exact
+                                    path={"/tienda/detalle/:requestId"}
+                                    component={Detail}
                                 />
                             </Switch>
                         </div>
@@ -43,7 +50,3 @@ export const App = () => {
         </>
     );
 };
-
-function About() {
-    return <h2>About</h2>;
-}
