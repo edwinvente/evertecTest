@@ -75658,9 +75658,9 @@ var Checkout = function Checkout() {
       setCart = _useState2[1];
 
   var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({
-    name: "edwin caicedo",
-    email: "edwin123067@gmail.com",
-    phone: "3023697923"
+    name: "",
+    email: "",
+    phone: ""
   }),
       _useState4 = _slicedToArray(_useState3, 2),
       client = _useState4[0],
@@ -75707,7 +75707,7 @@ var Checkout = function Checkout() {
               setLoading(true);
 
               if (!(client.name == "" || client.email == "" || client.phone == "")) {
-                _context.next = 5;
+                _context.next = 6;
                 break;
               }
 
@@ -75715,11 +75715,12 @@ var Checkout = function Checkout() {
                 icon: "error",
                 title: "Debes de llenar todos los campos"
               });
+              setLoading(false);
               return _context.abrupt("return");
 
-            case 5:
+            case 6:
               if (!(cart.length === 0)) {
-                _context.next = 8;
+                _context.next = 10;
                 break;
               }
 
@@ -75727,18 +75728,19 @@ var Checkout = function Checkout() {
                 icon: "error",
                 title: "Debes tener al menos un producto en la cesta"
               });
+              setLoading(false);
               return _context.abrupt("return");
 
-            case 8:
+            case 10:
               ref = uuidv4();
-              _context.next = 11;
+              _context.next = 13;
               return Object(_services_HttpPost__WEBPACK_IMPORTED_MODULE_3__["HttPost"])(_objectSpread(_objectSpread({}, client), {}, {
                 total: total,
                 cart: cart,
                 referencia: ref
               }), "/api/payment");
 
-            case 11:
+            case 13:
               resp = _context.sent;
               processUrl = resp.processUrl, message = resp.message;
               setLoading(false);
@@ -75748,7 +75750,7 @@ var Checkout = function Checkout() {
                 title: message
               });
 
-            case 16:
+            case 18:
             case "end":
               return _context.stop();
           }

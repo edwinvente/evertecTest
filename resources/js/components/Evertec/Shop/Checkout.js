@@ -22,9 +22,9 @@ export const Checkout = () => {
             : []
     );
     const [client, setClient] = useState({
-        name: "edwin caicedo",
-        email: "edwin123067@gmail.com",
-        phone: "3023697923",
+        name: "",
+        email: "",
+        phone: "",
     });
     const [loading, setLoading] = useState(false);
     const [total, setTotal] = useState(0);
@@ -54,6 +54,7 @@ export const Checkout = () => {
                 icon: "error",
                 title: "Debes de llenar todos los campos",
             });
+            setLoading(false);
             return;
         }
         if (cart.length === 0) {
@@ -61,6 +62,7 @@ export const Checkout = () => {
                 icon: "error",
                 title: "Debes tener al menos un producto en la cesta",
             });
+            setLoading(false);
             return;
         }
         let ref = uuidv4();
