@@ -12,12 +12,17 @@ class PayController extends Controller
     public $placetopay = null;
 
     public function __construct(){
+        $settings = config('evertec');
         $this->placetopay = new \Dnetix\Redirection\PlacetoPay([
-            'login' => '6dd490faf9cb87a9862245da41170ff2', // Provided by PlacetoPay
-            'tranKey' => '024h1IlD', // Provided by PlacetoPay
-            'url' => 'https://dev.placetopay.com/redirection/',
-            'timeout' => 10, // (optional) 15 by default
+            'login' => $settings["LOGIN"], // Provided by PlacetoPay
+            'tranKey' => $settings["TRANKEY"], // Provided by PlacetoPay
+            'url' => $settings["URL"],
+            'timeout' => $settings["TIMEOUT"], // (optional) 15 by default
         ]);
+    }
+
+    public function test(){
+        dd(config('evertec'));
     }
 
     public function payment(Request $request){
