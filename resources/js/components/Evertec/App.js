@@ -1,50 +1,49 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+//components
+import { Navbar } from "./components/Navbar";
+import { Shop } from "./Shop/Shop";
+import styled from "styled-components";
+import GlobalStyle from "./styles/GlobalStyle";
+import { Checkout } from "./Shop/Checkout";
 
 export const App = () => {
     return (
-        <Router>
-            <div>
-                <nav>
-                    <ul>
-                        <li>
-                            <Link to="/">Home</Link>
-                        </li>
-                        <li>
-                            <Link to="/about">About</Link>
-                        </li>
-                        <li>
-                            <Link to="/users">Users</Link>
-                        </li>
-                    </ul>
-                </nav>
-
-                {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
-                <Switch>
-                    <Route path="/about">
-                        <About />
-                    </Route>
-                    <Route path="/users">
-                        <Users />
-                    </Route>
-                    <Route path="/">
-                        <Home />
-                    </Route>
-                </Switch>
+        <>
+            <GlobalStyle />
+            <div className="container-fluid m-0 p-0">
+                <Router>
+                    <div className="row m-0 p-0">
+                        <div className="col-md-2 sidebar p-4">
+                            <Navbar />
+                        </div>
+                        <div className="col-md-10 p-4">
+                            <Switch>
+                                <Route
+                                    exact
+                                    path={"/tienda"}
+                                    component={Shop}
+                                />
+                                <Route
+                                    exact
+                                    path={"/tienda/ordenes"}
+                                    component={About}
+                                />
+                                <Route
+                                    exact
+                                    path={"/tienda/checkout"}
+                                    component={Checkout}
+                                />
+                            </Switch>
+                        </div>
+                    </div>
+                </Router>
             </div>
-        </Router>
+        </>
     );
 };
 
-function Home() {
-    return <h2>Home</h2>;
-}
-
 function About() {
     return <h2>About</h2>;
-}
-
-function Users() {
-    return <h2>Users</h2>;
 }

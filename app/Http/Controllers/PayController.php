@@ -91,7 +91,8 @@ class PayController extends Controller
             'timeout' => 10, // (optional) 15 by default
         ]);
         //$response = $placetopay->query('THE_REQUEST_ID_TO_QUERY');
-        $response = $placetopay->query('56415');
+        //$response = $placetopay->query('56415');
+        $response = $placetopay->query('56419');
 
         if ($response->isSuccessful()) {
             // In order to use the functions please refer to the Dnetix\Redirection\Message\RedirectInformation class
@@ -109,6 +110,10 @@ class PayController extends Controller
         } else {
             // There was some error with the connection so check the message
             print_r($response->status()->message() . "\n");
+        }
+        if ($response->status()->status() == "PENDING") {
+            # code...
+            dd("edwin",$response);
         }
     }
 }
