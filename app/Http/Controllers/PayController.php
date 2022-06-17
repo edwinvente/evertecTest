@@ -14,15 +14,11 @@ class PayController extends Controller
     public function __construct(){
         $settings = config('evertec');
         $this->placetopay = new \Dnetix\Redirection\PlacetoPay([
-            'login' => $settings["LOGIN"], // Provided by PlacetoPay
-            'tranKey' => $settings["TRANKEY"], // Provided by PlacetoPay
-            'url' => $settings["URL"],
+            'login'   => $settings["LOGIN"],
+            'tranKey' => $settings["TRANKEY"],
+            'url'     => $settings["URL"],
             'timeout' => $settings["TIMEOUT"], // (optional) 15 by default
         ]);
-    }
-
-    public function test(){
-        dd(config('evertec'));
     }
 
     public function payment(Request $request){
@@ -42,14 +38,10 @@ class PayController extends Controller
             'ipAddress' => '127.0.0.1',
             'userAgent' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36',
         ];
-
+        //create payment in platopay
         $response = $this->placetopay->request($requestPay);
-        if ($response->isSuccessful()) {            
-            $resp = $this->createOrder($request, $response->processUrl(), $response->requestId(), $response->status()->status());
-        } else {
-            // There was some error so check the message and log it
-            $response->status()->message();
-        }
+        //create order
+        $resp = $this->createOrder($request, $response);
         
         return response()->json([
             "placetopay" => $response,
@@ -101,19 +93,20 @@ class PayController extends Controller
         ], 200);
     }
 
-    public function createOrder($request, $url, $requestId, $statusPayment){
+    public function createOrder($request, $response){
         $status = true;
         $msg = "Guardado exitoso";
+        //create new instance for order
         $order = new Order;
         $order->customer_name = $request->name;
         $order->customer_email = $request->email;
         $order->customer_mobile = $request->phone;
-        $order->status = $statusPayment;
+        $order->status = $response->status()->status();
         $order->reference = $request->referencia;
         $order->products = $request->phone;
         $order->amount = $request->total;
-        $order->url = $url;
-        $order->requestId = $requestId;
+        $order->url = $response->processUrl();
+        $order->requestId = $response->requestId();
         try {
             $order->save();
         } catch (\Exception $e) {

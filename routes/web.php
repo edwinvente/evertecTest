@@ -14,5 +14,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', "WebController@index");
-Route::get('/test', "PayController@test");
 Route::get('/tienda/{path?}/{path2?}/{path3?}/{path4?}/{path5?}', "WebController@react");
