@@ -54,8 +54,10 @@ export const Orders = () => {
                     )}
                 </div>
                 <div className="col-md-6">
-                    {!orders && <h3>No hay ordenes disponibles</h3>}
-                    {orders &&
+                    {!orders && (
+                        <div>Ingresa tu email para buscar los registros</div>
+                    )}
+                    {orders && orders.length > 0 ? (
                         orders.map((o, i) => {
                             return (
                                 <div className="alert alert-dark" key={i}>
@@ -71,7 +73,10 @@ export const Orders = () => {
                                     </p>
                                 </div>
                             );
-                        })}
+                        })
+                    ) : (
+                        <h3>No tienes ordenes asociadas</h3>
+                    )}
                 </div>
             </div>
         </div>

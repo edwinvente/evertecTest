@@ -76059,7 +76059,7 @@ var Orders = function Orders() {
     className: "alert alert-danger mt-2"
   }, "Ingresa un email valido")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "col-md-6"
-  }, !orders && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "No hay ordenes disponibles"), orders && orders.map(function (o, i) {
+  }, !orders && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Ingresa tu email para buscar los registros"), orders && orders.length > 0 ? orders.map(function (o, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "alert alert-dark",
       key: i
@@ -76068,7 +76068,7 @@ var Orders = function Orders() {
     }, "Ver referencia pago"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
       href: o.url
     }, "revisar pago")));
-  }))));
+  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "No tienes ordenes asociadas"))));
 };
 
 /***/ }),

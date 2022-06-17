@@ -9,7 +9,7 @@ use Mail;
 
 class CacheHelper{
     public static function getCache($key){
-        $data = [];
+        $data = null;
         if (Cache::has($key)) {
             $data = Cache::get($key);
         }

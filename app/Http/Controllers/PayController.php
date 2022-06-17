@@ -79,7 +79,7 @@ class PayController extends Controller
         $key = 'order_'.$requestId;
 
         $dataInCache = CacheHelper::getCache($key);
-        if (count($dataInCache)) {
+        if ($dataInCache) {
             $order = $dataInCache;
         }else{
             $order = Order::where("requestId", $requestId)->first();
@@ -106,7 +106,7 @@ class PayController extends Controller
         $key = 'orders_'.$request->email;
 
         $dataInCache = CacheHelper::getCache($key);
-        if (count($dataInCache)) {
+        if ($dataInCache) {
             $order = $dataInCache;
         }else{
             $order = Order::where("customer_email", $request->email)->get();
