@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
+use App\Helpers\CacheHelper;
 use App\Order;
 
 
@@ -61,8 +63,10 @@ class PayController extends Controller
         if ($order) {
             $response = $this->placetopay->query($order->requestId);
             $order->status = $response->status()->status();
+            $key = 'orders_'.$order->email;
             try {
                 $order->save();
+                CacheHelper::deleteCache($key);
             } catch (\Exception $e) {
                 $msg = $e->getMessage();   
             }
@@ -71,7 +75,17 @@ class PayController extends Controller
     }
     
     public function getRefernce($requestId){
-        $order = Order::where("requestId", $requestId)->first();
+        $order = null;
+        $key = 'order_'.$requestId;
+
+        $dataInCache = CacheHelper::getCache($key);
+        if (count($dataInCache)) {
+            $order = $dataInCache;
+        }else{
+            $order = Order::where("requestId", $requestId)->first();
+            CacheHelper::createCache($key, $order);
+        }
+        
         $response = null;
         if ($order) {
             $response = $this->placetopay->query($order->requestId);
@@ -86,10 +100,22 @@ class PayController extends Controller
         ], 200);
     }
     
-    public function getOrders(Request $request){    
+    public function getOrders(Request $request){  
+        $order = null;  
+        //key for cache
+        $key = 'orders_'.$request->email;
+
+        $dataInCache = CacheHelper::getCache($key);
+        if (count($dataInCache)) {
+            $order = $dataInCache;
+        }else{
+            $order = Order::where("customer_email", $request->email)->get();
+            CacheHelper::createCache($key, $order);
+        }
+
         return response()->json([
             "status" => true,
-            "response" => Order::where("customer_email", $request->email)->get(),
+            "response" => $order,
         ], 200);
     }
 
@@ -109,6 +135,8 @@ class PayController extends Controller
         $order->requestId = $response->requestId();
         try {
             $order->save();
+            $key = 'orders_'.$request->email;
+            CacheHelper::deleteCache($key);
         } catch (\Exception $e) {
             $msg = $e->getMessage();   
         }
