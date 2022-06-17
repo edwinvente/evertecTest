@@ -133,6 +133,7 @@ class PayController extends Controller
         $order->amount = $request->total;
         $order->url = $response->processUrl();
         $order->requestId = $response->requestId();
+        //handle exceptions
         try {
             $order->save();
             $key = 'orders_'.$request->email;
@@ -140,9 +141,6 @@ class PayController extends Controller
         } catch (\Exception $e) {
             $msg = $e->getMessage();   
         }
-        return [
-            $status,
-            $msg
-        ];
+        return [ $status, $msg ];
     }
 }
